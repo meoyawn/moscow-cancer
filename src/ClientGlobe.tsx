@@ -1,10 +1,10 @@
 import React from "react"
 import type { Feature, FeatureCollection } from "@turf/helpers"
+import type { PickInfo } from "@deck.gl/core/lib/deck"
 // @ts-ignore
 import { _GlobeView as GlobeView } from "@deck.gl/core"
 import DeckGL from "@deck.gl/react"
 import { GeoJsonLayer } from "@deck.gl/layers"
-import type { PickInfo } from "deck.gl"
 
 const getTooltip = ({ object }: PickInfo<Feature>) => {
   if (!object?.properties) return null
@@ -14,7 +14,11 @@ const getTooltip = ({ object }: PickInfo<Feature>) => {
   }
 }
 
-export const ClientGlobe = ({ fc }: { fc: FeatureCollection }): JSX.Element => (
+export const ClientGlobe = ({
+  data,
+}: {
+  data: FeatureCollection
+}): JSX.Element => (
   <DeckGL
     views={[
       new GlobeView({
@@ -23,7 +27,7 @@ export const ClientGlobe = ({ fc }: { fc: FeatureCollection }): JSX.Element => (
     ]}
     layers={[
       new GeoJsonLayer({
-        data: fc,
+        data,
         getFillColor: [160, 160, 180],
         getLineColor: [255, 255, 255],
         stroked: true,

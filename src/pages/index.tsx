@@ -6,5 +6,5 @@ import russia from "../russia.json"
 
 // noinspection JSUnusedGlobalSymbols
 export default function Index() {
-  return <ClientGlobe fc={russia as FeatureCollection} />
+  return <ClientGlobe data={russia as FeatureCollection} />
 }
