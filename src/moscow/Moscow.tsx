@@ -17,7 +17,7 @@ import countries from "./countries.json"
 
 type RegionISO = keyof typeof years
 
-type Properties =
+type GeoProps =
   | {
       ISO_A2: RegionISO
       ADMIN: string
@@ -27,7 +27,7 @@ type Properties =
       shapeName: string
     }
 
-type Feat = Feature<Geometry, Properties>
+type Feat = Feature<Geometry, GeoProps>
 
 type Tooltip =
   | null
@@ -39,10 +39,10 @@ type Tooltip =
       style?: {}
     }
 
-const name = (p: Properties) => ("ISO_A2" in p ? p.ADMIN : p.shapeName)
-const iso = (p: Properties) => ("ISO_A2" in p ? p.ISO_A2 : p.shapeISO)
+const name = (p: GeoProps) => ("ISO_A2" in p ? p.ADMIN : p.shapeName)
+const iso = (p: GeoProps) => ("ISO_A2" in p ? p.ISO_A2 : p.shapeISO)
 
-const getText = (p: Properties) => `${name(p)}\n${years[iso(p)]}`
+const getText = (p: GeoProps) => `${name(p)}\n${years[iso(p)]}`
 
 const getTooltip = ({ object }: PickInfo<Feat>): Tooltip =>
   object?.properties ? { text: getText(object?.properties) } : null
