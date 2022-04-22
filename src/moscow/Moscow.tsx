@@ -70,10 +70,10 @@ const toRGB = (c: HSLColor): RGBAColor => {
 const hslColor = ({ properties }: Feat): HSLColor => {
   const arr = years[iso(properties)]
   if (arr?.length === 2) {
-    return hsl(138, 0.75, 1 - (arr[1] - arr[0]) / moscowFromNow)
+    return hsl(142, 0.76, 1 - (arr[1] - arr[0]) / moscowFromNow)
   }
   if (arr?.length === 1) {
-    return hsl(0, 0.75, (arr[0] - moscowYear) / moscowFromNow)
+    return hsl(0, 0.72, (arr[0] - moscowYear) / moscowFromNow)
   }
   return hsl("white")
 }
@@ -87,7 +87,7 @@ const data = (
   [...russia.features, ...countries.features, ...states.features] as Feat[]
 ).filter((f) => iso(f.properties) in years)
 
-export const Moscow = (): JSX.Element => (
+const Moscow = (): JSX.Element => (
   <DeckGL
     views={[new GlobeView({ resolution: 10 })]}
     layers={[
@@ -129,4 +129,26 @@ export const Moscow = (): JSX.Element => (
     getTooltip={getTooltip}
     parameters={{ cull: true }}
   />
+)
+
+const legend: ReadonlyArray<{ className: string; text: string }> = [
+  { className: "bg-black", text: "Moscow" },
+  { className: "bg-red-600", text: "Conquered" },
+  { className: "bg-green-600", text: "Liberated" },
+]
+
+export const Legended = (): JSX.Element => (
+  <div className="h-screen w-full">
+    <Moscow />
+    <div className="pointer-events-none absolute flex flex-col space-y-2 p-5">
+      <h1 className="text-2xl">Territories of Muscovy by year of conquest</h1>
+
+      {legend.map(({ className, text }) => (
+        <div key={text} className="flex items-center space-x-1">
+          <div className={`h-5 w-5 ${className}`}></div>
+          <p>{text}</p>
+        </div>
+      ))}
+    </div>
+  </div>
 )
