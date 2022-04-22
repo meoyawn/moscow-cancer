@@ -49,8 +49,11 @@ const getText = (p: GeoProps) =>
 const getTooltip = ({ object }: PickInfo<Feat>): Tooltip =>
   object?.properties ? { text: getText(object?.properties) } : null
 
+const BLACK: RGBAColor = [0, 0, 0]
+const WHITE: RGBAColor = [255, 255, 255]
+
 const polygonsStroke: PathLayerProps<Feature<LineString>> = {
-  getColor: [255, 255, 255],
+  getColor: WHITE,
   getWidth: 1000,
   widthMinPixels: 0.1,
 }
@@ -64,16 +67,21 @@ const toRGB = (c: HSLColor): RGBAColor => {
   return [r, g, b]
 }
 
-const getFillColor = ({ properties }: Feat): RGBAColor => {
+const hslColor = ({ properties }: Feat): HSLColor => {
   const arr = years[iso(properties)]
   if (arr?.length === 2) {
-    return toRGB(hsl(138, 0.75, 1 - (arr[1] - arr[0]) / moscowFromNow))
+    return hsl(138, 0.75, 1 - (arr[1] - arr[0]) / moscowFromNow)
   }
   if (arr?.length === 1) {
-    return toRGB(hsl(0, 0.75, (arr[0] - moscowYear) / moscowFromNow))
+    return hsl(0, 0.75, (arr[0] - moscowYear) / moscowFromNow)
   }
-  return [100, 100, 100]
+  return hsl("white")
 }
+
+const contrastColor = (feat: Feat): RGBAColor =>
+  hslColor(feat).l > 0.5 ? BLACK : WHITE
+
+const getFillColor = (feat: Feat): RGBAColor => toRGB(hslColor(feat))
 
 const data = (
   [...russia.features, ...countries.features, ...states.features] as Feat[]
@@ -83,22 +91,6 @@ export const Moscow = (): JSX.Element => (
   <DeckGL
     views={[new GlobeView({ resolution: 10 })]}
     layers={[
-      // new SolidPolygonLayer<[number, number][][]>({
-      //   id: "background",
-      //   data: [
-      //     [
-      //       [-180, 90],
-      //       [0, 90],
-      //       [180, 90],
-      //       [180, -90],
-      //       [0, -90],
-      //       [-180, -90],
-      //     ],
-      //   ],
-      //   getPolygon: (d) => d,
-      //   filled: true,
-      //   getFillColor: [100, 100, 100],
-      // }),
       new GeoJsonLayer<Feat>({
         id: "regions",
         data,
@@ -113,15 +105,16 @@ export const Moscow = (): JSX.Element => (
       new TextLayer<Feat>({
         id: "text",
         data,
-        getPosition: (f) =>
-          turfCentroid(f.geometry as any).geometry.coordinates as any,
-        getText: (f) => getText(f.properties),
         sizeUnits: "meters",
         getSize: 17_000,
         getTextAnchor: "middle",
         getAlignmentBaseline: "center",
         parameters: { depthTest: false },
         fontFamily: "sans-serif",
+        getPosition: (f) =>
+          turfCentroid(f.geometry as any).geometry.coordinates as any,
+        getText: (f) => getText(f.properties),
+        getColor: contrastColor,
       }),
     ]}
     initialViewState={{
