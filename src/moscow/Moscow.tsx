@@ -43,11 +43,13 @@ type Tooltip =
 const name = (p: GeoProps) => ("ISO_A2" in p ? p.ADMIN : p.shapeName)
 const iso = (p: GeoProps) => ("ISO_A2" in p ? p.ISO_A2 : p.shapeISO)
 
-const getText = (p: GeoProps) =>
-  iso(p) in years ? `${name(p)}\n${years[iso(p)]}` : name(p)
+const getText = ({ properties }: Feat) => {
+  const [from, to] = years[iso(properties)]
+  return `${name(properties)}\n${from}-${to ?? ""}`
+}
 
 const getTooltip = ({ object }: PickInfo<Feat>): Tooltip =>
-  object?.properties ? { text: getText(object?.properties) } : null
+  object?.properties ? { text: getText(object) } : null
 
 const BLACK: RGBAColor = [0, 0, 0]
 const WHITE: RGBAColor = [255, 255, 255]
@@ -113,7 +115,7 @@ const Moscow = (): JSX.Element => (
         fontFamily: "sans-serif",
         getPosition: (f) =>
           turfCentroid(f.geometry as any).geometry.coordinates as any,
-        getText: (f) => getText(f.properties),
+        getText,
         getColor: contrastColor,
       }),
     ]}
