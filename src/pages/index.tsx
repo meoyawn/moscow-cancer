@@ -1,8 +1,8 @@
 import React from "react"
 
-import { Legended } from "../moscow/Moscow"
+import { Legendary } from "../moscow/Moscow"
 
 // noinspection JSUnusedGlobalSymbols
 export default function Index() {
-  return <Legended />
+  return <Legendary />
 }

@@ -140,7 +140,7 @@ const legend: ReadonlyArray<{ className: string; text: string }> = [
   { className: "bg-green-600", text: "Liberated" },
 ]
 
-export const Legended = (): JSX.Element => (
+export const Legendary = (): JSX.Element => (
   <div className="h-screen w-full">
     <SEO title="Moscow cancer by the year of metastasis" />
 
