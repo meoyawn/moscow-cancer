@@ -1,6 +1,3 @@
-// @ts-ignore
-import { _GlobeView as GlobeView, COORDINATE_SYSTEM } from "@deck.gl/core"
-
 import React from "react"
 import { hsl, HSLColor } from "d3-color"
 import type { PickInfo } from "@deck.gl/core/lib/deck"
@@ -10,6 +7,10 @@ import type { PathLayerProps } from "@deck.gl/layers/path-layer/path-layer"
 import type { RGBAColor } from "@deck.gl/core/utils/color"
 import type { Feature, Geometry, LineString } from "@turf/helpers"
 import turfCentroid from "@turf/centroid"
+// @ts-ignore
+import { _GlobeView as GlobeView, COORDINATE_SYSTEM } from "@deck.gl/core"
+
+import { SEO } from "../SEO"
 
 import russia from "./russia.json"
 import years from "./years.json"
@@ -141,7 +142,10 @@ const legend: ReadonlyArray<{ className: string; text: string }> = [
 
 export const Legended = (): JSX.Element => (
   <div className="h-screen w-full">
+    <SEO title="Moscow cancer by the year of metastasis" />
+
     <Moscow />
+
     <div className="pointer-events-none absolute flex flex-col space-y-2 p-5">
       <h1 className="text-2xl">Territories of Muscovy by year of conquest</h1>
 
