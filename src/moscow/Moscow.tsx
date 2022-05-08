@@ -61,9 +61,10 @@ const polygonsStroke: PathLayerProps<Feature<LineString>> = {
   widthMinPixels: 0.1,
 }
 
-const moscowYear = years["RU-MOS"][0]
-const nowYear = new Date().getFullYear()
-const moscowFromNow = nowYear - moscowYear
+const startYear = years["RU-MOS"][0]
+const endYear = new Date().getFullYear()
+
+const moscowFromNow = endYear - startYear
 
 const toRGB = (c: HSLColor): RGBAColor => {
   const { r, g, b } = c.rgb()
@@ -76,7 +77,7 @@ const hslColor = ({ properties }: Feat): HSLColor => {
     return hsl(142, 0.76, 1 - (arr[1] - arr[0]) / moscowFromNow)
   }
   if (arr?.length === 1) {
-    return hsl(0, 0.72, (arr[0] - moscowYear) / moscowFromNow)
+    return hsl(0, 0.72, (arr[0] - startYear) / moscowFromNow)
   }
   return hsl("white")
 }
@@ -141,7 +142,7 @@ const legend: ReadonlyArray<{ className: string; text: string }> = [
 ]
 
 export const Legendary = (): JSX.Element => (
-  <div className="h-screen w-full">
+  <div className="relative h-screen w-full overflow-hidden">
     <SEO title="Moscow cancer by the year of metastasis" />
 
     <Moscow />
