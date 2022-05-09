@@ -75,13 +75,13 @@ const RED_HUE = 0
 const hslColor = ({ properties }: Feat, year: number): HSLColor => {
   const arr = years[iso(properties)]
 
-  const moscowFromNow = year - startYear
+  const yearsFromStart = year - startYear
 
   if (arr?.length === 2 && arr[1] < year) {
-    return hsl(GREEN_HUE, 0.76, 1 - (arr[1] - arr[0]) / moscowFromNow)
+    return hsl(GREEN_HUE, 0.76, 1 - (arr[1] - arr[0]) / yearsFromStart)
   }
 
-  return hsl(RED_HUE, 0.72, (arr[0] - startYear) / moscowFromNow)
+  return hsl(RED_HUE, 0.72, (arr[0] - startYear) / yearsFromStart)
 }
 
 const contrastColor =
@@ -98,13 +98,15 @@ const initialData = (
   [...russia.features, ...countries.features, ...states.features] as Feat[]
 ).filter((f) => iso(f.properties) in years)
 
+const views = [new GlobeView({ resolution: 10 })]
+
 const Moscow = ({ year }: { year: number }): JSX.Element => {
   const data = initialData.filter((x) => years[iso(x.properties)][0] <= year)
   const getFillColor = fillColor(year)
   const getColor = contrastColor(year)
   return (
     <DeckGL
-      views={[new GlobeView({ resolution: 10 })]}
+      views={views}
       layers={[
         new GeoJsonLayer<Feat>({
           id: "regions",
