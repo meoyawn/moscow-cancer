@@ -53,11 +53,11 @@ const colorDomain = (data: Data, mode: Mode): [min: number, max: number] => {
   let min = Number.MAX_SAFE_INTEGER
   let max = Number.MIN_SAFE_INTEGER
 
-  for (let c of Object.keys(data.males)) {
+  for (const c in data.males) {
     const iso = c as CountryISOA3
     const years = data.males[iso]
     if (years) {
-      for (let year of Object.keys(years)) {
+      for (const year in years) {
         const d = value(data, mode, iso, Number(year) as Year)
         if (d) {
           min = Math.min(min, d)
@@ -85,16 +85,6 @@ const interpolateColor = (data: Data, mode: Mode) => {
   return (d: number) => interpolateRdYlGn(minMax(d))
 }
 
-const fetchData = async (): Promise<Data> => {
-  const [males, females] = await Promise.all(
-    [fetch("/life/males.csv"), fetch("/life/females.csv")].map(x =>
-      x.then(x => x.text()).then(parse)
-    )
-  )
-
-  return { males, females }
-}
-
 const float = (s: string) => (s ? Number(s.replace(",", ".")) : undefined)
 
 const parse = (csv: string) => {
@@ -120,6 +110,16 @@ const parse = (csv: string) => {
   }
 
   return ret
+}
+
+const fetchData = async (): Promise<Data> => {
+  const [males, females] = await Promise.all(
+    [fetch("/life/males.csv"), fetch("/life/females.csv")].map(x =>
+      x.then(x => x.text()).then(parse)
+    )
+  )
+
+  return { males, females }
 }
 
 const fillColor = (data: Data, mode: Mode, year: Year) => {
