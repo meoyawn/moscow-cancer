@@ -1,4 +1,4 @@
-import React, { Dispatch, useState } from "react"
+import React, { useState } from "react"
 import { hsl, HSLColor } from "d3-color"
 import type { PickInfo } from "@deck.gl/core/lib/deck"
 import DeckGL from "@deck.gl/react"
@@ -7,39 +7,31 @@ import type { PathLayerProps } from "@deck.gl/layers/path-layer/path-layer"
 import type { RGBAColor } from "@deck.gl/core/utils/color"
 import type { Feature, Geometry, LineString } from "@turf/helpers"
 import turfCentroid from "@turf/centroid"
-// @ts-ignore
-import { _GlobeView as GlobeView, COORDINATE_SYSTEM } from "@deck.gl/core"
 
-import { SEO } from "../SEO"
+import { SEO } from "../../SEO"
+import { Tooltip } from "../../lib/deck"
+import { ofType } from "../../lib/typescript"
+import { BLACK, GLOBE_VIEW, WHITE } from "../deck"
 
 import russia from "./russia.json"
 import years from "./years.json"
-import countries from "./countries.json"
+import countries from "../../countries.json"
 import states from "./states.json"
+import { YearSlider } from "../YearSlider"
 
-type RegionISO = keyof typeof years
+type RegionISOA2 = keyof typeof years
 
 type GeoProps =
   | {
-      ISO_A2: RegionISO
+      ISO_A2: RegionISOA2
       ADMIN: string
     }
   | {
-      shapeISO: RegionISO
+      shapeISO: RegionISOA2
       shapeName: string
     }
 
 type Feat = Feature<Geometry, GeoProps>
-
-type Tooltip =
-  | null
-  | string
-  | {
-      text?: string
-      html?: string
-      className?: string
-      style?: {}
-    }
 
 const name = (p: GeoProps) => ("ISO_A2" in p ? p.ADMIN : p.shapeName)
 const iso = (p: GeoProps) => ("ISO_A2" in p ? p.ISO_A2 : p.shapeISO)
@@ -51,15 +43,6 @@ const getText = ({ properties }: Feat) => {
 
 const getTooltip = ({ object }: PickInfo<Feat>): Tooltip =>
   object?.properties ? { text: getText(object) } : null
-
-const BLACK: RGBAColor = [0, 0, 0]
-const WHITE: RGBAColor = [255, 255, 255]
-
-const polygonsStroke: PathLayerProps<Feature<LineString>> = {
-  getColor: WHITE,
-  getWidth: 1000,
-  widthMinPixels: 0.1,
-}
 
 const startYear = years["RU-MOS"][0]
 const endYear = new Date().getFullYear()
@@ -98,15 +81,13 @@ const initialData = (
   [...russia.features, ...countries.features, ...states.features] as Feat[]
 ).filter((f) => iso(f.properties) in years)
 
-const views = [new GlobeView({ resolution: 10 })]
-
-const Moscow = ({ year }: { year: number }): JSX.Element => {
+const MoscowGlobe = ({ year }: { year: number }): JSX.Element => {
   const data = initialData.filter((x) => years[iso(x.properties)][0] <= year)
   const getFillColor = fillColor(year)
   const getColor = contrastColor(year)
   return (
     <DeckGL
-      views={views}
+      views={GLOBE_VIEW}
       layers={[
         new GeoJsonLayer<Feat>({
           id: "regions",
@@ -116,7 +97,11 @@ const Moscow = ({ year }: { year: number }): JSX.Element => {
           stroked: true,
           getFillColor,
           _subLayerProps: {
-            "polygons-stroke": polygonsStroke,
+            "polygons-stroke": ofType<PathLayerProps<Feature<LineString>>>({
+              getColor: WHITE,
+              getWidth: 1000,
+              widthMinPixels: 0.1,
+            }),
           },
         }),
         new TextLayer<Feat>({
@@ -166,30 +151,6 @@ const Legend = () => (
   </>
 )
 
-const YearSlider = ({
-  value,
-  setValue,
-}: {
-  value: number
-  setValue: Dispatch<number>
-}) => (
-  <div className="flex flex-col">
-    <input
-      className="pointer-events-auto h-11"
-      type="range"
-      min={startYear}
-      max={endYear}
-      value={value}
-      onChange={(e) => setValue(e.target.valueAsNumber)}
-    />
-
-    <div className="flex flex-row justify-between">
-      <span className="text-lg font-bold">{value}</span>
-      <span>{endYear}</span>
-    </div>
-  </div>
-)
-
 export const Legendary = (): JSX.Element => {
   const [year, setYear] = useState(endYear)
 
@@ -197,14 +158,19 @@ export const Legendary = (): JSX.Element => {
     <div className="relative h-screen w-full overflow-hidden">
       <SEO title="Moscow cancer by the year of metastasis" />
 
-      <Moscow year={year} />
+      <MoscowGlobe year={year} />
 
       <div className="pointer-events-none absolute flex flex-col space-y-2 p-5">
         <h1 className=" text-2xl">
           Territories of Muscovy by year of conquest
         </h1>
 
-        <YearSlider value={year} setValue={setYear} />
+        <YearSlider
+          value={year}
+          setValue={setYear}
+          min={startYear}
+          max={endYear}
+        />
 
         {/*<Legend />*/}
       </div>

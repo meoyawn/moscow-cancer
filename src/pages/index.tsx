@@ -1,6 +1,6 @@
 import React from "react"
 
-import { Legendary } from "../moscow/Moscow"
+import { Legendary } from "../app/moscow/Moscow"
 
 // noinspection JSUnusedGlobalSymbols
 export default function Index() {

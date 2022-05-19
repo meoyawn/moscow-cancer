@@ -1,4 +1,4 @@
-import "../globals.css"
+import "../tailwind.css"
 import type { AppProps } from "next/app"
 
 // noinspection JSUnusedGlobalSymbols
