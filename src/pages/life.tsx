@@ -30,7 +30,7 @@ const value = (
   { females, males }: Data,
   mode: Mode,
   c: CountryISOA3,
-  year: Year
+  year: Year,
 ): number | undefined => {
   const f = females[c]?.[year]
   const m = males[c]?.[year]
@@ -115,8 +115,8 @@ const parse = (csv: string) => {
 const fetchData = async (): Promise<Data> => {
   const [males, females] = await Promise.all(
     [fetch("/life/males.csv"), fetch("/life/females.csv")].map(x =>
-      x.then(x => x.text()).then(parse)
-    )
+      x.then(x => x.text()).then(parse),
+    ),
   )
 
   return { males, females }
@@ -158,7 +158,7 @@ const LifeGlobe = ({
 }): JSX.Element => {
   const getFillColor = useMemo(
     () => fillColor(data, mode, year),
-    [data, mode, year]
+    [data, mode, year],
   )
   const getTooltip = useMemo(() => tooltip(data, year), [data, year])
 

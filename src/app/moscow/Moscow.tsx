@@ -79,10 +79,10 @@ const fillColor =
 
 const initialData = (
   [...russia.features, ...countries.features, ...states.features] as Feat[]
-).filter((f) => iso(f.properties) in years)
+).filter(f => iso(f.properties) in years)
 
 const MoscowGlobe = ({ year }: { year: number }): JSX.Element => {
-  const data = initialData.filter((x) => years[iso(x.properties)][0] <= year)
+  const data = initialData.filter(x => years[iso(x.properties)][0] <= year)
   const getFillColor = fillColor(year)
   const getColor = contrastColor(year)
   return (
@@ -113,7 +113,7 @@ const MoscowGlobe = ({ year }: { year: number }): JSX.Element => {
           getAlignmentBaseline: "center",
           parameters: { depthTest: false },
           fontFamily: "sans-serif",
-          getPosition: (f) =>
+          getPosition: f =>
             turfCentroid(f.geometry as any).geometry.coordinates as any,
           getText,
           getColor,
