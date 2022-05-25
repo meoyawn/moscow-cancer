@@ -18,7 +18,7 @@ export const YearSlider = ({
       min={min}
       max={max}
       value={value}
-      onChange={(e) => setValue(e.target.valueAsNumber)}
+      onChange={e => setValue(e.target.valueAsNumber)}
     />
 
     <div className="flex flex-row justify-between">
