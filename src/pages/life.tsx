@@ -16,8 +16,9 @@ import { SEO } from "../SEO"
 import { YearSlider } from "../app/YearSlider"
 import type { Tooltip } from "../lib/deck"
 
-type CountryISOA3 = string & { readonly __tag__: unique symbol }
-type Year = number & { readonly __tag__: unique symbol }
+type CountryISOA3 = string & { readonly iso3: unique symbol }
+type Year = number & { readonly year: unique symbol }
+
 type Lookup = Partial<Record<CountryISOA3, Partial<Record<Year, number>>>>
 type Mode = "male" | "female" | "diff"
 
