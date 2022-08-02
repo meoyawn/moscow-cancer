@@ -83,8 +83,7 @@ const initialData = (
 
 const MoscowGlobe = ({ year }: { year: number }): JSX.Element => {
   const data = initialData.filter(x => years[iso(x.properties)][0] <= year)
-  const getFillColor = fillColor(year)
-  const getColor = contrastColor(year)
+
   return (
     <DeckGL
       views={GLOBE_VIEW}
@@ -95,7 +94,7 @@ const MoscowGlobe = ({ year }: { year: number }): JSX.Element => {
           filled: true,
           pickable: true,
           stroked: true,
-          getFillColor,
+          getFillColor: fillColor(year),
           _subLayerProps: {
             "polygons-stroke": ofType<PathLayerProps<Feature<LineString>>>({
               getColor: WHITE,
@@ -116,7 +115,7 @@ const MoscowGlobe = ({ year }: { year: number }): JSX.Element => {
           getPosition: f =>
             turfCentroid(f.geometry as any).geometry.coordinates as any,
           getText,
-          getColor,
+          getColor: contrastColor(year),
         }),
       ]}
       initialViewState={{

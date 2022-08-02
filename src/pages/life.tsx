@@ -123,17 +123,18 @@ const fetchData = async (): Promise<Data> => {
   return { males, females }
 }
 
+export const toRGBA = (c: string): RGBAColor => {
+  const { r, g, b } = rgb(c)
+
+  return [r, g, b]
+}
+
 const fillColor = (data: Data, mode: Mode, year: Year) => {
   const diffToColor = interpolateColor(data, mode)
 
   return (feat: Feat): RGBAColor => {
     const d = value(data, mode, feat.properties.ISO_A3, year)
-    if (d) {
-      const { r, g, b } = rgb(diffToColor(d))
-      return [r, g, b]
-    } else {
-      return [150, 150, 150]
-    }
+    return d ? toRGBA(diffToColor(d)) : [150, 150, 150]
   }
 }
 
