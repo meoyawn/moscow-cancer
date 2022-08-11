@@ -31,40 +31,13 @@
     "prettier-plugin-tailwindcss": "^0.1.10",
     "tailwindcss": "^3.0.24",
     "typescript": "^4.6.3",
-    "wireit": "^0.7.1"
+    "vercel": "^27.4.0"
   },
   "scripts": {
     "dev": "next dev",
-    "build": "wireit",
-    "start": "wireit",
-    "lint": "next lint"
-  },
-  "wireit": {
-    "build": {
-      "command": "next build",
-      "clean": false,
-      "files": [
-        "src/",
-        "public/",
-        ".env*",
-        "*.config.js"
-      ],
-      "output": [
-        ".next/"
-      ],
-      "packageLocks": [
-        "yarn.lock"
-      ]
-    },
-    "start": {
-      "command": "next start",
-      "dependencies": [
-        "build"
-      ],
-      "output": [],
-      "packageLocks": [
-        "yarn.lock"
-      ]
-    }
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "deploy": "vercel --prod"
   }
 }
