@@ -150,19 +150,23 @@ const Legend = () => (
   </>
 )
 
+const title = "Territories of Muscovy by year of conquest"
+
 export const Legendary = (): JSX.Element => {
   const [year, setYear] = useState(endYear)
 
   return (
     <div className="relative h-screen w-full overflow-hidden">
-      <SEO title="Moscow cancer by the year of metastasis" />
+      <SEO
+        title={title}
+        image="/kremlin.png"
+        twitterCard="summary_large_image"
+      />
 
       <MoscowGlobe year={year} />
 
       <div className="pointer-events-none absolute flex flex-col space-y-2 p-5">
-        <h1 className=" text-2xl">
-          Territories of Muscovy by year of conquest
-        </h1>
+        <h1 className="text-2xl">{title}</h1>
 
         <YearSlider
           value={year}
