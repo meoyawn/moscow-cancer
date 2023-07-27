@@ -15,6 +15,7 @@ import { GLOBE_VIEW, WHITE } from "../app/deck"
 import { SEO } from "../SEO"
 import { YearSlider } from "../app/YearSlider"
 import type { Tooltip } from "../lib/deck"
+import { log } from "console"
 
 type CountryISOA3 = string & { readonly iso3: unique symbol }
 type Year = number & { readonly year: unique symbol }
@@ -68,7 +69,7 @@ const colorDomain = (data: Data, mode: Mode): [min: number, max: number] => {
     }
   }
 
-  return [min, max]
+  return [Math.max(min, 0), Math.min(max, 10)]
 }
 
 interface GeoProps {
@@ -97,7 +98,7 @@ const parse = (csv: string) => {
   for (let i = 1; i < lines.length; i++) {
     const row = lines[i].split(";")
     const code = row[1] as CountryISOA3
-    for (let j = 2; j < row.length; j++) {
+    for (let j = 4; j < row.length; j++) {
       const year = columnNames[j] as Year
       const value = float(row[j])
       if (value) {
@@ -202,7 +203,7 @@ const LifeGlobe = ({
 
 const title = "Life Expectancy"
 const startYear = 1960
-const endYear = 2020
+const endYear = 2021
 
 const radios: ReadonlyArray<{ id: Mode; title: string }> = [
   { id: "diff", title: "Female - Male" },
@@ -216,7 +217,7 @@ const Radio = ({ mode, setMode }: { mode: Mode; setMode: Dispatch<Mode> }) => (
     onChange={e => setMode((e.target as HTMLInputElement).id as Mode)}
   >
     <legend className="sr-only">Notification method</legend>
-    <div className="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
+    <div className="space-y-4 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
       {radios.map(radio => (
         <div key={radio.id} className="flex items-center">
           <input

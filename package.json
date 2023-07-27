@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@deck.gl/core": "^8.7.7",
-    "@deck.gl/layers": "^8.7.7",
-    "@deck.gl/react": "^8.7.7",
+    "@deck.gl/core": "~8.8.0",
+    "@deck.gl/layers": "~8.8.0",
+    "@deck.gl/react": "~8.8.0",
     "@loaders.gl/core": "^3.2.1",
     "@turf/centroid": "^6.5.0",
     "d3-color": "^3.1.0",
@@ -31,7 +31,7 @@
     "prettier-plugin-tailwindcss": "^0.2.7",
     "tailwindcss": "^3.0.24",
     "typescript": "^5.0.4",
-    "vercel": "^28.4.9"
+    "vercel": "^31.1.1"
   },
   "scripts": {
     "dev": "next dev",
