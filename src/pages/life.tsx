@@ -69,7 +69,10 @@ const colorDomain = (data: Data, mode: Mode): [min: number, max: number] => {
     }
   }
 
-  return [Math.max(min, 0), Math.min(max, 10)]
+  return [
+    mode === "diff" ? Math.max(min, 0) : min,
+    mode === "diff" ? Math.min(max, 10) : max,
+  ]
 }
 
 interface GeoProps {
