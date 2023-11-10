@@ -20,6 +20,9 @@ dependencies:
   '@turf/centroid':
     specifier: ^6.5.0
     version: 6.5.0
+  '@turf/helpers':
+    specifier: ^6.5.0
+    version: 6.5.0
   d3-color:
     specifier: ^3.1.0
     version: 3.1.0
