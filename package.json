@@ -32,7 +32,8 @@
     "prettier-plugin-tailwindcss": "^0.2.7",
     "tailwindcss": "^3.0.24",
     "typescript": "^5.0.4",
-    "vercel": "^31.1.1"
+    "vercel": "^31.1.1",
+    "vitest": "^0.34.6"
   },
   "scripts": {
     "dev": "next dev",

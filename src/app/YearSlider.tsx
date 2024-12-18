@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react"
+import React, { type Dispatch, type JSX } from "react"
 
 export const YearSlider = ({
   value,
